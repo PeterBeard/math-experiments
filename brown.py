@@ -5,42 +5,58 @@ import math
 def generateCards(indices, limit):
 	ncards = len(indices)
 	indices = sorted(indices)[::-1]
+	# The highest number representable with the list is 1111 ... 111, which is the sum of all elements
 	if limit > sum(indices):
 		print "Cannot generate enough cards using the given indices."
 		return []
 	cards = []
+	# Initialize each card to be an empty list
 	for i in range(0,ncards):
 		cards.append([])
+	# Iterate over the numbers from 1 to limit (inclusive) and figure out their representations in the given number system
 	for n in range(1,limit+1):
 		# Figure out which cards need to have n on them
 		appearsOn = []
 		nt = n
+		# Go through the positions in reverse order and subtracting out the largest one that fits each time. This gives us the numbers representation in the given number system and therefore tells us which cards need to have n on them
 		for i in range(0,ncards):
 			if nt >= indices[i]:
 				nt -= indices[i]
 				appearsOn.append(i)
-		# Add the number to the correct cards
+		# Add n to the correct cards
 		for c in appearsOn:
 			cards[c].append(n)
 	return cards
 
-# Display the card in a pleasing way
+# Display a card in a pleasing way
 def displayCard(card):
 	nitems = len(card)
 	displaysize = int(math.sqrt(nitems))+1
 
+	# Make the top edge of the frame
+	print '+' + '='*((displaysize*3)+1) + '+'
 	for i in range(0,displaysize):
+		# Left frame edge
+		print '|',
 		for j in range(0,displaysize):
 			index = j+i*displaysize
+			# Display the next number
 			if index < nitems:
-				print card[index],
-		print
-# Generate cards using the Fibonacci numbers and a max value of 30
+				print "%2i" % card[index],
+			# Past the end of the array, print blank spaces
+			else:
+				print '  ',
+		# Right frame edge
+		print '|'
+	# Bottom frame edge
+	print '+' + '='*((displaysize*3)+1) + '+'
+
+# Generate cards using the first few Fibonacci numbers and a max value of 30
 maxGuess = 50
 cards = generateCards([1,2,3,5,8,13,21],maxGuess)
 
-s = raw_input('Think of a number between 1 and '+str(maxGuess)+'. Press enter when you have a number.')
-# The players number is just the sum of the indices of all of the cards containing that number, i.e. all of its digits using the given sequence.
+s = raw_input('Think of a number between 1 and '+str(maxGuess)+'. Press enter when you\'ve decided.')
+# The player's number is just the sum of the indices of all of the cards containing that number, i.e. all of its digits using the given sequence.
 s = 0
 for c in cards:
 	displayCard(c)
