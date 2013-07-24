@@ -35,11 +35,11 @@ def displayCard(card):
 			if index < nitems:
 				print card[index],
 		print
+# Generate cards using the Fibonacci numbers and a max value of 30
+maxGuess = 50
+cards = generateCards([1,2,3,5,8,13,21],maxGuess)
 
-
-cards = generateCards([1,2,3,5,8,13],30)
-
-s = raw_input('Think of a number between 1 and 30. Press enter when you have a number.')
+s = raw_input('Think of a number between 1 and '+str(maxGuess)+'. Press enter when you have a number.')
 # The players number is just the sum of the indices of all of the cards containing that number, i.e. all of its digits using the given sequence.
 s = 0
 for c in cards:
