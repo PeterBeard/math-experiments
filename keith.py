@@ -1,4 +1,5 @@
 # Find all the Keith numbers in a given range and attempt to cluster them
+import argparse
 
 # Return a list containng the digits of the given integer
 def getDigits(value):
@@ -22,39 +23,39 @@ def isKeith(value, showSteps=False):
 			print '  ' + ' + '.join(str(x) for x in values) + ' = ' + str(s)
 		values.append(s)
 	return s == value
+parser = argparse.ArgumentParser()
+parser.add_argument('-m','--maxvalue',help='The value to stop searching for Keith numbers at.', type=int, default=0)
+parser.add_argument('-q','--quiet',help='Don\'t show information about Keith numbers or the steps involved in verifying them.', action='store_true', default=False)
+args = parser.parse_args()
 
-# Explain Keith numbers to the user
-print "A Keith number is any n-digit integer where repeatedly summing groups"
-print "of n numbers from the digits and then the resulting sums that results"
-print "in the original number."
-print
-print "For example, 14 is a Keith number because 1 + 4 = 5, 4 + 5 = 9, and"
-print "5 + 9 = 14."
-print
-print "A Keith cluster is any group of Keith numbers that are multiples of"
-print "the smallest member of the cluster."
-print
-print "This script will search for Keith numbers and Keith clusters up to"
-print "the given upper bound."
-print
-print
-# Get the upper bound for our search
-try:
-	keithMax = int(raw_input('Enter the number to stop searching at: '))
-except:
-	print 'Invalid input.'
-	quit()
+if not args.quiet:
+	# Explain Keith numbers to the user
+	print "A Keith number is any n-digit integer where repeatedly summing groups"
+	print "of n numbers from the digits and then the resulting sums that results"
+	print "in the original number."
+	print
+	print "For example, 14 is a Keith number because 1 + 4 = 5, 4 + 5 = 9, and"
+	print "5 + 9 = 14."
+	print
+	print "A Keith cluster is any group of Keith numbers that are multiples of"
+	print "the smallest member of the cluster."
+	print
+	print "This script will search for Keith numbers and Keith clusters up to"
+	print "the given upper bound."
+	print
+	print
 
-try:
-	showSteps = raw_input('Show verification steps (y/n)? ')
-except:
-	print 'Error parsing input.'
-	quit()
-
-if showSteps == 'y':
-	showSteps = True
+if args.maxvalue == 0:
+	# Get the upper bound for our search
+	try:
+		keithMax = int(raw_input('Enter the number to stop searching at: '))
+	except:
+		print 'Invalid input.'
+		quit()
 else:
-	showSteps = False
+	keithMax = args.maxvalue
+
+showSteps = not args.quiet
 
 # Look for Keith numbers between 10 and keithMax (all single-digit integers are Keith numbers)
 keiths = []
