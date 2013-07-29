@@ -43,11 +43,13 @@ try:
 	keithMax = int(raw_input('Enter the number to stop searching at: '))
 except:
 	print 'Invalid input.'
+	quit()
 
 try:
 	showSteps = raw_input('Show verification steps (y/n)? ')
 except:
 	print 'Error parsing input.'
+	quit()
 
 if showSteps == 'y':
 	showSteps = True
