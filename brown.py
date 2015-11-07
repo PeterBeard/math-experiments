@@ -55,7 +55,12 @@ def displayCard(card):
 maxGuess = 50
 cards = generateCards([1,2,3,5,8,13,21],maxGuess)
 
-s = raw_input('Think of a number between 1 and '+str(maxGuess)+'. Press enter when you\'ve decided.')
+print 'Think of a number between 1 and %i.'
+s = raw_input('Press enter when you\'ve decided on a number.')
+print ''
+print 'Now I\'ll show you some cards and you just have to tell me if you see your number.'
+print ''
+
 # The player's number is just the sum of the indices of all of the cards containing that number, i.e. all of its digits using the given sequence.
 s = 0
 for c in cards:

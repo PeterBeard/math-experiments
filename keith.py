@@ -31,8 +31,8 @@ args = parser.parse_args()
 if not args.quiet:
 	# Explain Keith numbers to the user
 	print "A Keith number is any n-digit integer where repeatedly summing groups"
-	print "of n numbers from the digits and then the resulting sums that results"
-	print "in the original number."
+	print "of n numbers from the digits and then the resulting sums yields the"
+	print "original number."
 	print
 	print "For example, 14 is a Keith number because 1 + 4 = 5, 4 + 5 = 9, and"
 	print "5 + 9 = 14."

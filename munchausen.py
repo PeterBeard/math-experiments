@@ -26,6 +26,16 @@ def is_munchausen(n, show_steps=False):
 	# If the sum of d**d equals the number, it's a Munchausen number
 	return s == i
 
+
+print 'A Munchausen number is an integer where the sum of the digits raised to the'
+print 'power of themselves equals the original number.'
+print ''
+print 'For example, 3,435 is a Munchausen number because:'
+print '3^3 + 4^4 + 3^3 + 5^5 = 3435'
+print ''
+print 'This script will find all Munchausen numbers in a particular range.'
+print ''
+
 # Ask the user for the parameters of the search space
 try:
 	lower_bound = int(raw_input('Where shall I start the search? '))
