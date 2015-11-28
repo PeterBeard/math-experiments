@@ -1,56 +1,92 @@
-# Find ways to express numbers as a sum of three integers cubed
+"""
+Find ways to express a number as a sum of three cubes of integers
+
+Inspired by this Numberphile video:
+
+"""
+# Most of the solutions are pretty small, but some are huge
+# To speed up the search, we do it in stages
+SEARCH_MAX_A = 20
+SEARCH_MAX_B = 60
+SEARCH_MAX_C = 180
+
+def simplify_cubes(cubes):
+    """
+    Take a triplet of cubes and try to reduce them
+
+    For example, (-99, 3, 99) can be simplified to (0, 3, 0)
+    """
+    a, b, c = cubes
+
+    if a == -b:
+        return (0, 0, c)
+    if a == -c:
+        return (0, b, 0)
+    if b == -c:
+        return (a, 0, 0)
+    # Couldn't simplify
+    return cubes
 
 
-# Find a solution (a, b, and c) to a^3 + b^3 + c^3 = n
-# n is any integer
-# max_n is the largest value of a, b, or c to check. Default is 250
-def find_cubes(n, max_n=250):
-    # Values of the form 9k+4 or 9k+5 are not expressible as the sum of three cubes
-    if (n-4) % 9 == 0 or (n-5) % 9 == 0:
-        return None
-    # Limit ourselves to a fairly small search space
-    for i in range(0, max_n):
-        i_cubed = i**3
-        for j in range(0, max_n):
-            j_cubed = j**3
-            for k in range(0, max_n):
-                k_cubed = k**3
+def find_cubes_in_range(n, values):
+    """
+    Find three cubes that add up to n in values
 
-                # If this triple works,  return it
-                if i_cubed + j_cubed + k_cubed == n:
-                    return (i, j, k)
-                elif i_cubed + j_cubed - k_cubed == n:
-                    return (i, j, -k)
-                elif i_cubed - j_cubed + k_cubed == n:
-                    return (i, -j, k)
-                elif -i_cubed + j_cubed + k_cubed == n:
-                    return (-i, j, k)
-                elif i_cubed - j_cubed - k_cubed == n:
-                    return (i, -j, -k)
-                elif -i_cubed - j_cubed + k_cubed == n:
-                    return (-i, -j, k)
-                elif -i_cubed + j_cubed - k_cubed == n:
-                    return(-i, j, -k)
-                elif -i_cubed - j_cubed - k_cubed == n:
-                    return(-i, -j, -k)
+    Arguments:
+    n -- an integer
+    values -- a list of values to check, usually generated with range()
+    """
+    for a in values:
+        for b in values:
+            for c in values:
+                if a**3 + b**3 + c**3 == n:
+                    return simplify_cubes((a, b, c))
 
-    # We didn't find a solution :(
-    return None
+    # No cubes found
+    return (None, None, None)
 
 
-# Print an equation in a nice way
-# n is the solution to the equation
-# values is a 3-tuple of the form (a,b,c)
-def print_sum(n, values):
-    print ('%i = (%i)' + unichr(179) + ' + (%i)' + unichr(179) + ' + (%i)' + unichr(179)) %\
-          (n, values[0], values[1], values[2])
+def find_cubes(n):
+    """Find three cubes of integers that add up to n"""
+    # Integers of the form 9n + 4 and 9n + 5 don't work...
+    if (n - 4) % 9 == 0 or (n - 5) % 9 == 0:
+        return (None, None, None)
+    # ...but there should be a solution for every other int
+    # Calculate the ranges
+    RANGE_A = range(-SEARCH_MAX_A, SEARCH_MAX_A)
+    RANGE_B = range(-SEARCH_MAX_B, SEARCH_MAX_B)
+    RANGE_C = range(-SEARCH_MAX_C, SEARCH_MAX_C)
 
-# Get the values to check around
-max_search = int(raw_input('How high shall I look for solutions? '))
+    # Try the small range
+    cubes = find_cubes_in_range(n, RANGE_A)
 
-for i in range(1, max_search+1):
-    cubes = find_cubes(i)
-    if cubes:
-        print_sum(i, cubes)
+    if cubes != (None, None, None):
+        return cubes
+
+    # Try the middle range
+    cubes = find_cubes_in_range(n, RANGE_B)
+
+    if cubes != (None, None, None):
+        return cubes
+
+    # Try the big range
+    return find_cubes_in_range(n, RANGE_C)
+
+
+def main():
+    """Get user input and look for sums of cubes"""
+    print('This program will find three integers that satisfy the equation:\n')
+    print('{:^80}\n'.format('a\xb3 + b\xb3 + c\xb3 = n'))
+    print('For any integer n.\n')
+
+    n = int(input('Enter an integer: '))
+    cubes = find_cubes(n)
+
+    print('')
+    if cubes != (None, None, None):
+        print('{0} = {1[0]}\xb3 + {1[1]}\xb3 + {1[2]}\xb3'.format(n, cubes))
     else:
-        print '%i is not expressible as the sum of three integer cubes.' % i
+        print('{0} is not expressible as the sum of three cubes.'.format(n))
+
+if __name__ == '__main__':
+    main()
