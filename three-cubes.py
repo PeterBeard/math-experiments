@@ -37,10 +37,28 @@ def find_cubes_in_range(n, values):
     values -- a list of values to check, usually generated with range()
     """
     for a in values:
+        a_cubed = a**3
         for b in values:
+            b_cubed = b**3
             for c in values:
-                if a**3 + b**3 + c**3 == n:
+                c_cubed = c**3
+                # Try positive and negative cubes
+                if a_cubed + b_cubed + c_cubed == n:
                     return simplify_cubes((a, b, c))
+                elif -a_cubed + b_cubed + c_cubed == n:
+                    return simplify_cubes((-a, b, c))
+                elif a_cubed - b_cubed + c_cubed == n:
+                    return simplify_cubes((a, -b, c))
+                elif a_cubed + b_cubed - c_cubed == n:
+                    return simplify_cubes((a, b, -c))
+                elif -a_cubed - b_cubed + c_cubed == n:
+                    return simplify_cubes((-a, -b, c))
+                elif -a_cubed + b_cubed - c_cubed == n:
+                    return simplify_cubes((-a, b, -c))
+                elif a_cubed - b_cubed - c_cubed == n:
+                    return simplify_cubes((a, -b, -c))
+                elif -a_cubed - b_cubed - c_cubed == n:
+                    return simplify_cubes((-a, -b, -c))
 
     # No cubes found
     return (None, None, None)
@@ -53,9 +71,9 @@ def find_cubes(n):
         return (None, None, None)
     # ...but there should be a solution for every other int
     # Calculate the ranges
-    RANGE_A = range(-SEARCH_MAX_A, SEARCH_MAX_A)
-    RANGE_B = range(-SEARCH_MAX_B, SEARCH_MAX_B)
-    RANGE_C = range(-SEARCH_MAX_C, SEARCH_MAX_C)
+    RANGE_A = range(0, SEARCH_MAX_A)
+    RANGE_B = range(0, SEARCH_MAX_B)
+    RANGE_C = range(0, SEARCH_MAX_C)
 
     # Try the small range
     cubes = find_cubes_in_range(n, RANGE_A)
