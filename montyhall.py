@@ -4,14 +4,14 @@
 # This program simulates a number of runs of the Monty Hall problem and compares
 # two strategies: always switching doors and never switching.
 
-from random import randint, choice
+from random import randrange, choice
 from optparse import OptionParser
 
 # Generate three doors, one hiding a car (True) and two hiding goats (False)
 # Also returns the location of the car as the second element in the tuple
 def generate_doors():
     doors = [False, False, False]
-    car_index = randint(0,2)
+    car_index = randrange(len(doors))
     doors[car_index] = True
     return (doors, car_index)
 
@@ -22,17 +22,17 @@ def generate_doors():
 def simulate_game():
     available_doors = [0, 1, 2]
     (doors, car_index) = generate_doors()
-    choice = randint(0,2)
-    available_doors.remove(choice)
+    player_choice = randrange(len(doors))
+    available_doors.remove(player_choice)
 
     # If the player never changes doors, we can see if they won right now
-    never_result = doors[choice]
+    never_result = doors[player_choice]
 
-    # Choose a door to open -- can't choose the door with the car or the door
-    # the player chose
+    # Next, the host will open a door the player didn't choose and that
+    # doesn't have the car behind it
     host_choice = car_index
-    while host_choice == car_index or host_choice == choice:
-        host_choice = randint(0,2)
+    while host_choice == car_index or host_choice == player_choice:
+        host_choice = randrange(len(doors))
     available_doors.remove(host_choice)
 
     # What's behind the other door?
@@ -56,7 +56,11 @@ def main():
             always_sum += 1
         if never:
             never_sum += 1
-    print("After {} games:\nAlways: {:02.01f}% / Never {:02.01f}%".format(game_count, always_sum*100/game_count, never_sum*100/game_count))
+    print("After {} games:\nAlways: {:02.02f}% / Never {:02.02f}%".format(
+        game_count,
+        always_sum*100.0/game_count,
+        never_sum*100.0/game_count)
+    )
 
 if __name__ == '__main__':
     main()
